@@ -63,3 +63,6 @@ def process_labels(label_file, OUTPUT_DIR):
             img = img[y_up:y_down+1, x_left:x_right+1, :]
             cv2.imwrite(OUTPUT_DIR + class_name.upper() + '/' + img_data['filename'], img)
 
+
+download_labels(LABELS_DIR, OUTPUT_DIR)
+make_cropped_dataset(LABELS_DIR, OUTPUT_DIR)
