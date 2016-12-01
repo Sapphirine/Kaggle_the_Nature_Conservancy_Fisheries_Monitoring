@@ -58,8 +58,8 @@ def process_labels(label_file, OUTPUT_DIR):
             bot_x = top_x + img_width
             bot_y = top_y + img_height
             top_x, bot_x, top_y, bot_y = int(top_x), int(bot_x), int(top_y), int(bot_y)
-            img = img[top_y:bot_y+1, top_x:bot_x+1, :] 
-            cv2.imwrite(OUTPUT_DIR + class_name.upper() + '/' + str(i) + '_' + img_data['filename'], img)
+            img_zoom = img[top_y:bot_y+1, top_x:bot_x+1, :] 
+            cv2.imwrite(OUTPUT_DIR + class_name.upper() + '/' + str(i) + '_' + img_data['filename'], img_zoom)
 
 
 download_labels(LABELS_DIR, LABELS_LINKS)
