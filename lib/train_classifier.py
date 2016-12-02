@@ -12,8 +12,11 @@ def get_file_path(path):
                 path_list.append(fullpath)
     return(path_list)
 
-path = '/Users/pengfeiwang/Desktop/f/data/output/'
-neg_path = '/Users/pengfeiwang/Desktop/f/data/train/NoF'
+os.chdir = '/Users/pengfeiwang/Desktop/f/'
+
+path = 'data/output/'
+neg_path = 'data/train/NoF/'
+neg_out_path = 'data/output/NoF/'
 
 pos_name = get_file_path(path)
 neg_name = os.listdir(neg_path)
@@ -23,20 +26,22 @@ for i, j in enumerate(pos_name):
     train = []
     train[:] = imresize(imread(j), [128, 128, 3])
     imsave(j, train)
-    with open('/Users/pengfeiwang/Desktop/f/data/output/pos.info', 'ab') as g:
+    with open('data/output/pos.info', 'ab') as g:
         g.write(j + ' 1 0 0 128 128 \n')
 
 for i in neg_name:
-    i_name = neg_path + i
-    neg = []
-    neg[:] = imresize(imread(i_name), [128, 128, 3])
-    imsave(i_name, train)
-    with open('/Users/pengfeiwang/Desktop/f/data/output/neg.info', 'ab') as g:
-        g.write(i_name + '\n')
+    if i[0] != '.':
+        i_name = neg_out_path + i
+        neg = []
+        neg[:] = imresize(imread(neg_path+i), [128, 128, 3])
+        imsave(i_name, neg)
+        with open('data/output/neg.info', 'ab') as g:
+            g.write(i_name + '\n')
 
 # in bash
 # cd into the location of pos.info
 # opencv_createsamples -info pos.info -num 4471 -w 128 -h 128 -vec /Users/pengfeiwang/Desktop/f/data/output/fish.vec
 # opencv_createsamples -vec fish.vec -w 128 -h 128
-# opencv_traincascade -data data -vec fish.vec -bg neg_info.txt -numStages 10 -numPos 4471 -numNeg 465 -w 128 -h 128 -featureType LBP
+# opencv_traincascade -data data -vec fish.vec -bg neg_info.txt -numStages 10 -numPos 4000 -numNeg 465 -w 128 -h 128 -featureType LBP
 
+## numPos should be less than the vec number, which is 4471
