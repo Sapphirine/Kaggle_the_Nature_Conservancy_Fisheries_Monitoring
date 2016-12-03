@@ -26,7 +26,7 @@ for i, j in enumerate(pos_name):
     train = []
     train[:] = imresize(imread(j), [128, 128, 3])
     imsave(j, train)
-    with open('data/output/pos.info', 'ab') as g:
+    with open(base + 'data/output/pos.info', 'ab') as g:
         g.write(j + ' 1 0 0 128 128 \n')
 
 for i in neg_name:
@@ -35,7 +35,7 @@ for i in neg_name:
         neg = []
         neg[:] = imresize(imread(neg_path + i), [128, 128, 3])
         imsave(i_name, neg)
-        with open('data/output/neg.info', 'ab') as g:
+        with open(base + 'data/output/neg.info', 'ab') as g:
             g.write(i_name + '\n')
 
 # in bash
