@@ -12,11 +12,11 @@ def get_file_path(path):
                 path_list.append(fullpath)
     return(path_list)
 
-os.chdir = '/Users/pengfeiwang/Desktop/f/'
+base = '/Users/pengfeiwang/Desktop/f/'
 
-path = 'data/output/'
-neg_path = 'data/train/NoF/'
-neg_out_path = 'data/output/NoF/'
+path = base + 'data/output/'
+neg_path = base + 'data/train/NoF/'
+neg_out_path = base + 'data/output/NoF/'
 
 pos_name = get_file_path(path)
 neg_name = os.listdir(neg_path)
@@ -33,7 +33,7 @@ for i in neg_name:
     if i[0] != '.':
         i_name = neg_out_path + i
         neg = []
-        neg[:] = imresize(imread(neg_path+i), [128, 128, 3])
+        neg[:] = imresize(imread(neg_path + i), [128, 128, 3])
         imsave(i_name, neg)
         with open('data/output/neg.info', 'ab') as g:
             g.write(i_name + '\n')
@@ -44,4 +44,4 @@ for i in neg_name:
 # opencv_createsamples -vec fish.vec -w 128 -h 128
 # opencv_traincascade -data data -vec fish.vec -bg neg_info.txt -numStages 10 -numPos 4000 -numNeg 465 -w 128 -h 128 -featureType LBP
 
-## numPos should be less than the vec number, which is 4471
+# numPos should be less than the vec number, which is 4471
