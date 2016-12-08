@@ -22,7 +22,9 @@ absolute_path = [os.path.join(image_path, i)
 
 
 loaction = dict()
+j = 0
 for i in absolute_path:
+    j += 1
     name = i.split('/')[-1].split('.')[0]
     image = cv2.imread(i)
     clone = image.copy()
@@ -40,8 +42,9 @@ for i in absolute_path:
         elif key == ord("c"):
             break
     if len(refPt) == 2:
-        print refPt[0][1], refPt[1][1]
-        print refPt[0][0], refPt[1][0]
+        print "-------------------------------------------------"
+        print j
+        print refPt[0][1], refPt[1][1], refPt[0][0], refPt[1][0]
         loaction[name] = [(refPt[0][1], refPt[1][1]),
                           (refPt[0][0], refPt[1][0])]
         roi = clone[refPt[0][1]:refPt[1][1], refPt[0][0]:refPt[1][0]]
