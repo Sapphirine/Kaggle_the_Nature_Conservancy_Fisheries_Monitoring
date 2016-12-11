@@ -1,7 +1,9 @@
 import os
 import cv2
+import glob
 
-
+# <=====================================================================================>
+# utils
 def click_and_crop(event, x, y, flags, param):
     global refPt, cropping
     if event == cv2.EVENT_LBUTTONDOWN:    # indicates that the left mouse button is pressed
@@ -15,6 +17,8 @@ def click_and_crop(event, x, y, flags, param):
         cv2.imshow("image", image)
 
 
+# <=====================================================================================>
+# set the path 
 image_path = '/Users/pengfeiwang/Desktop/f/data/test_stg1'
 output_path = '/Users/pengfeiwang/Desktop/output_test'
 absolute_path = [os.path.join(image_path, i)
@@ -52,3 +56,36 @@ for i in absolute_path:
         cv2.imwrite(os.path.join(output_path, i.split('/')[-1]), roi)
         cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+
+# <=====================================================================================>
+# Here is the process to crop the smaller image and get the position of the graph
+# after the classification of the fish boat
+
+label = range(-1,27)
+sample_path = [glob.glob('/Users/pengfeiwang/Desktop/c1/%s/*.jpg' %i)[0] for i in label]
+
+loaction = dict()
+for j,i in enumerate(sample_path):
+    image = cv2.imread(i)
+    clone = image.copy()
+    cv2.namedWindow("image")
+    refPt = [];
+    cropping = False
+    cv2.setMouseCallback("image", click_and_crop)
+    while True:
+        cv2.imshow("image", image)
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord("r"):
+            image = clone.copy()
+        elif key == ord("c"):
+            break
+    if len(refPt) == 2:
+        print j+"  ===>  "+refPt[0][1], refPt[1][1], refPt[0][0], refPt[1][0]
+        loaction[j] = [(refPt[0][1], refPt[1][1]),(refPt[0][0], refPt[1][0])]
+    cv2.destroyAllWindows()
+
+
+
+
+
