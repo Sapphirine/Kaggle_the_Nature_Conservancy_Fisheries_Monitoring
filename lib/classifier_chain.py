@@ -30,13 +30,13 @@ def print_clf(clf, trainx, testx, trainy, testy):
 	print confusion_matrix(np.array(testy), pred)
 
 def binary_trans(trainy, testy, i):
-	trainy['image_path'] = trainy['image_path'].apply(lambda x: 1 if x==int(i) else 0)
-	testy['image_path'] = testy['image_path'].apply(lambda x: 1 if x==int(i) else 0)
-	return(trainy, testy)
+	y1 = trainy['image_path'].apply(lambda x: 1 if x==int(i) else 0).tolist()
+	y2 = testy['image_path'].apply(lambda x: 1 if x==int(i) else 0).tolist()
+	return(y1, y2)
 
 # <=====================================================================================>
 # load the data
-df = joblib.load('/Users/pengfeiwang/Desktop/f/fisheries/data/data.pkl','rb')
+df = joblib.load('/Users/pengfeiwang/Desktop/f/fisheries/data/ .pkl','rb')
 
 x = pd.DataFrame(df['features'].tolist())
 y = df['image_path'].apply(lambda x: find_label(x)).to_frame()
@@ -57,15 +57,21 @@ trainy2, target2 = binary_trans(trainy, testy, '2')
 clf = GradientBoostingClassifier(max_depth=10, learning_rate=0.1, subsample=0.9, n_estimators=800)
 print_clf(clf, trainx, testx, trainy2, target2)
 
-# chain 3 ==> to be continued
+# chain 3
 trainy3, target3 = binary_trans(trainy, testy, '3')
-clf = GradientBoostingClassifier(max_depth=10, learning_rate=0.1, subsample=1, n_estimators=800)
+clf = GradientBoostingClassifier(max_depth=5, learning_rate=0.1, subsample=0.9, n_estimators=800)
 print_clf(clf, trainx, testx, trainy3, target3)
 
+# chain 4
+trainy4, target4 = binary_trans(trainy, testy, '4')
+clf = GradientBoostingClassifier(max_depth=5, learning_rate=0.1, subsample=0.9, n_estimators=800)
+print_clf(clf, trainx, testx, trainy4, target4)
+
 gbc_grid = GridSearchCV(estimator = GradientBoostingClassifier(),
-                        param_grid = {'max_depth': [10], 'n_estimators': [300], 'learning_rate': [0.1],
-                        'subsample':[1,0.9,0.8]},
+                        param_grid = {'max_depth': [10], 'n_estimators': [300], 'learning_rate': [0.1,0.2,0.3],
+                        'subsample':[1]},
                         scoring = 'neg_log_loss')
-gbc_grid.fit(trainx, trainy3['image_path'])
+
+gbc_grid.fit(trainx, trainy4['image_path'])
 print gbc_grid.best_estimator_
 print gbc_grid.best_score_
