@@ -85,7 +85,7 @@ pickle.dump(distances, open('./ship_distances.pkl', 'wb'))
 
 distances = pickle.load(open('./ship_distances.pkl', 'rb'))
 
-## classifier chain I
+## classifier I
 cls = cluster.DBSCAN(metric='precomputed', min_samples=5, eps=0.5, leaf_size=40)
 y = print_cls_result(cls, distances)
 # d = clf_dict(y, all_ship_path) # for whole
@@ -95,7 +95,7 @@ ship_output_path = '/Users/pengfeiwang/Desktop/c1/'
 save_local(d, ship_output_path)
 
 
-## classifier chain II
+## classifier II
 unc_file = glob.glob(ship_output_path + str(-1) + '/' + '*.jpg')
 distances2 = calculate_distance(unc_file)
 cls2 = cluster.DBSCAN(metric='precomputed', min_samples=5, eps=0.75, leaf_size=40)
