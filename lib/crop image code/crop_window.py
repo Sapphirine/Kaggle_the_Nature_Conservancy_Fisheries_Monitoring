@@ -18,48 +18,7 @@ def click_and_crop(event, x, y, flags, param):
 
 
 # <=====================================================================================>
-# set the path 
-image_path = '/Users/pengfeiwang/Desktop/f/data/test_stg1'
-output_path = '/Users/pengfeiwang/Desktop/output_test'
-absolute_path = [os.path.join(image_path, i)
-                 for i in os.listdir(image_path) if i[0] != '.']
-
-
-loaction = dict()
-j = 0
-for i in absolute_path:
-    j += 1
-    name = i.split('/')[-1].split('.')[0]
-    image = cv2.imread(i)
-    clone = image.copy()
-    cv2.namedWindow("image")
-    refPt = []
-    cropping = False
-    cv2.setMouseCallback("image", click_and_crop)
-    while True:
-        cv2.imshow("image", image)
-        key = cv2.waitKey(1) & 0xFF
-        # if the 'r' key is pressed, reset the cropping region
-        if key == ord("r"):
-            image = clone.copy()
-        # if the 'c' key is pressed, break from the loop
-        elif key == ord("c"):
-            break
-    if len(refPt) == 2:
-        print "-------------------------------------------------"
-        print j
-        print refPt[0][1], refPt[1][1], refPt[0][0], refPt[1][0]
-        loaction[name] = [(refPt[0][1], refPt[1][1]),
-                          (refPt[0][0], refPt[1][0])]
-        roi = clone[refPt[0][1]:refPt[1][1], refPt[0][0]:refPt[1][0]]
-        cv2.imshow("ROI", roi)
-        cv2.imwrite(os.path.join(output_path, i.split('/')[-1]), roi)
-        cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
-
-# <=====================================================================================>
-# Here is the process to crop the smaller image and get the position of the graph
+# Here is the process to crop the window and get the position of the graph
 # after the classification of the fish boat
 
 label = range(-1,27)

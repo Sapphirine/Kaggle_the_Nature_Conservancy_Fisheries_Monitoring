@@ -23,6 +23,4 @@ for i in file_name:
 		    crop_fish = img[y:y+h, x:x+w]
 		    cv2.imwrite(os.path.join(output_path,str(j)+'_'+output_name),crop_fish,)
 		cv2.imshow('img',img)
-	break
-
-plt.show()		    
+		plt.show()		    

@@ -47,7 +47,7 @@ def binary_trans(trainy, testy, i):
     return(y1, y2)
 
 
-# <=====================================================================================>
+# <=======================================================================================================>
 # load the data
 os.chdir('/Users/pengfeiwang/Desktop/f/fisheries/')
 
@@ -108,7 +108,7 @@ gbc_grid = GridSearchCV(estimator=GradientBoostingClassifier(),
 gbc_grid.fit(trainx, trainy)
 print gbc_grid.best_estimator_
 
-# <=====================================================================================>
+# <=======================================================================================================>
 # ensemble
 test_df = testy.copy()
 test_df.columns = ['label']
@@ -132,7 +132,7 @@ clf_logis.fit(tr_x, tr_y)
 log_loss(te_y, clf_logis.predict_proba(te_x))
 
 
-# <=====================================================================================>
+# <=======================================================================================================>
 # for the test data
 t = joblib.load('./data/8000_bow_test.pkl', 'rb')
 index_name = t['image_path']
