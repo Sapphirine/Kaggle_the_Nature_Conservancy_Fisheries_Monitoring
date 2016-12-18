@@ -1,9 +1,18 @@
-import numpy as np
+import os
 import cv2
 import json
 import glob
-import os
 import urllib2
+import numpy as np
+
+'''
+Cropped fish in the images which to train the haar cascade
+
+Someone in kaggle has bounded boxes of fish in the images
+and saved the result into json files.
+
+Link: https://www.kaggle.com/c/the-nature-conservancy-fisheries-monitoring/forums/t/25902/complete-bounding-box-annotation
+'''
 
 os.chdir('/Users/pengfeiwang/Desktop/f/data/')
 LABELS_DIR = 'labels/'
@@ -48,23 +57,18 @@ def process_labels(label_file, OUTPUT_DIR):
     for img_data in data:
         img_file = TRAIN_DIR + class_name.upper() + '/' + img_data['filename']
         img = cv2.imread(img_file)
-        # We will crop only images with both heads and tails present for cleaner dataset
         k = len(img_data['annotations'])
         for i in range(k):
-            top_x = max(0,img_data['annotations'][i]['x'])
-            top_y = max(0,img_data['annotations'][i]['y'])
+            top_x = max(0, img_data['annotations'][i]['x'])
+            top_y = max(0, img_data['annotations'][i]['y'])
             img_width = img_data['annotations'][i]['width']
             img_height = img_data['annotations'][i]['height']
             bot_x = top_x + img_width
             bot_y = top_y + img_height
             top_x, bot_x, top_y, bot_y = int(top_x), int(bot_x), int(top_y), int(bot_y)
-            img_zoom = img[top_y:bot_y+1, top_x:bot_x+1, :] 
+            img_zoom = img[top_y:bot_y + 1, top_x:bot_x + 1, :]
             cv2.imwrite(OUTPUT_DIR + class_name.upper() + '/' + str(i) + '_' + img_data['filename'], img_zoom)
 
 
 download_labels(LABELS_DIR, LABELS_LINKS)
 make_cropped_dataset(LABELS_DIR, OUTPUT_DIR)
-
-
-
-

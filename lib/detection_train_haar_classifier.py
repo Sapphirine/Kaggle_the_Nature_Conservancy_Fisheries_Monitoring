@@ -2,6 +2,9 @@ from scipy.misc import *
 import re
 import os
 
+'''
+train the haar cascade
+'''
 
 def get_file_path(path):
     path_list = []
@@ -12,8 +15,8 @@ def get_file_path(path):
                 path_list.append(fullpath)
     return(path_list)
 
-base = '/Users/pengfeiwang/Desktop/f/'
 
+base = '/Users/pengfeiwang/Desktop/f/'
 path = base + 'data/output/'
 neg_path = base + 'data/train/NoF/'
 neg_out_path = base + 'data/output/NoF/'
@@ -21,7 +24,7 @@ neg_out_path = base + 'data/output/NoF/'
 pos_name = get_file_path(path)
 neg_name = os.listdir(neg_path)
 
-# resize and save
+# pisitive instance file
 for i, j in enumerate(pos_name):
     train = []
     train[:] = imresize(imread(j), [128, 128, 3])
@@ -29,6 +32,7 @@ for i, j in enumerate(pos_name):
     with open(base + 'data/output/pos.info', 'ab') as g:
         g.write(j + ' 1 0 0 128 128 \n')
 
+# negative instance file
 for i in neg_name:
     if i[0] != '.':
         i_name = neg_out_path + i
@@ -40,8 +44,8 @@ for i in neg_name:
 
 # in bash
 # cd into the location of pos.info
-# opencv_createsamples -info pos.info -num 4471 -w 128 -h 128 -vec /Users/pengfeiwang/Desktop/f/data/output/fish.vec
-# opencv_createsamples -vec fish.vec -w 128 -h 128
-# opencv_traincascade -data data -vec fish.vec -bg neg_info.txt -numStages 10 -numPos 4000 -numNeg 465 -w 128 -h 128 -featureType LBP
+opencv_createsamples -info pos.info -num 4471 -w 128 -h 128 -vec /Users/pengfeiwang/Desktop/f/data/output/fish.vec
+opencv_createsamples -vec fish.vec -w 128 -h 128
+opencv_traincascade -data data -vec fish.vec -bg neg_info.txt -numStages 10 -numPos 4000 -numNeg 465 -w 128 -h 128 -featureType LBP
 
 # numPos should be less than the vec number, which is 4471
