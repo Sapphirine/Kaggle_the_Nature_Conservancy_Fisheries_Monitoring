@@ -1,6 +1,7 @@
 import os
 import cv2
 import glob
+import pickle
 
 '''
 This script is to get windows in the images after clustring the ships
@@ -27,7 +28,7 @@ def click_and_crop(event, x, y, flags, param):
 label = range(-1,27)  # we have 27 cluster of ships
 sample_path = [glob.glob('/Users/pengfeiwang/Desktop/c1/%s/*.jpg' %i)[0] for i in label]
 
-loaction = dict()
+location = dict()
 for j,i in enumerate(sample_path):
     image = cv2.imread(i)
     clone = image.copy()
@@ -43,11 +44,13 @@ for j,i in enumerate(sample_path):
         elif key == ord("c"):
             break
     if len(refPt) == 2:
-        print j+"  ===>  "+refPt[0][1], refPt[1][1], refPt[0][0], refPt[1][0]
-        loaction[j] = [(refPt[0][1], refPt[1][1]),(refPt[0][0], refPt[1][0])]
+        print j+"  ===>  " + refPt[0][1], refPt[1][1], refPt[0][0], refPt[1][0]
+        location['c'+str(j)] = [(refPt[0][1], refPt[1][1]),(refPt[0][0], refPt[1][0])]
     cv2.destroyAllWindows()
 
-# loaction
+# location
+pickle.dump(location,open('/Users/pengfeiwang/Desktop/location.pkl', 'wb'))
+
 
 
 

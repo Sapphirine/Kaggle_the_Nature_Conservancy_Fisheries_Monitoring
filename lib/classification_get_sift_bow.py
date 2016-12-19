@@ -69,3 +69,5 @@ for path in image_paths:
 
 traindata = np.array(traindata).reshape(len(np.array(traindata)), -1)
 joblib.dump((traindata), "train_data.pkl")
+
+
