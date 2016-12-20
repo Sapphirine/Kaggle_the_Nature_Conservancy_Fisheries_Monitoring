@@ -1,7 +1,8 @@
 import joblib
 import re
 import pandas as pd
-from pyspark.mllib.tree import RandomForest, RandomForestModel
+from pyspark.mllib.tree import RandomForest
+from pyspark.mllib.tree import GradientBoostedTrees
 from pyspark.mllib.regression import LabeledPoint
 
 a = joblib.load('/Users/pengfeiwang/Desktop/fisheries/output/bow_feature.pkl')
@@ -32,15 +33,36 @@ df1 = df.rdd.map(lambda x: (x['image_path'], x['features']))
 (trainingData, testData) = df1.randomSplit([0.8, 0.2])
 trainingData = trainingData.map(lambda x: LabeledPoint(x[0],x[1]))
 
+
+# <=================================================================================================================>
+# RandomForest Classifier
+maxDepth_selection = [5, 10, 15, 20, 30]
+maxBins_selection = [10, 20, 30, 40]
+model_rf = RandomForest.trainClassifier(trainingData, numClasses = 8, \
+                                     numTrees = 800, featureSubsetStrategy = "auto", \
+                                     impurity = 'gini', maxDepth = 5, maxBins = 30)
+
+predictions_rf = model_rf.predict(testData.map(lambda x: x[1]))
+labelsAndPredictions_rf = testData.map(lambda x: x[0]).zip(predictions_rf)
+testErr_rf = labelsAndPredictions_rf.filter(lambda (v, p): v != p).count() / float(testData.count())
+print "Precision is " + testErr_rf
+
+
+# <=================================================================================================================>
+# Gradient Boost Decision Tree
+# tunning order
+learningRate_selection = [0.1, 0.2, 0.3]
 maxDepth_selection = [5, 10, 15, 20, 30]
 
-model = RandomForest.trainClassifier(trainingData, numClasses=8, categoricalFeaturesInfo={}, \
-                                     numTrees=500, featureSubsetStrategy="auto", \
-                                     impurity='gini', maxDepth=5, maxBins=32)
+model_xgbt = GradientBoostedTrees.trainClassifier(trainingData, numClasses = 8, \
+                                              loss = 'logLoss', numIterations = 800, \
+                                              learningRate = 0.1, maxDepth = 10)
+predictions_xgbt = model_xgbt.predict(testData.map(lambda x: x[1]))
+labelsAndPredictions_xgbt = testData.map(lambda x: x[0]).zip(predictions_xgbt)
+testErr_xgbt = labelsAndPredictions_xgbt.filter(lambda (v, p): v != p).count() / float(testData.count())
+print "Precision is " + testErr_xgbt
 
-predictions = model.predict(testData.map(lambda x: x[1]))
-labelsAndPredictions = testData.map(lambda x: x[0]).zip(predictions)
-testErr = labelsAndPredictions.filter(lambda (v, p): v != p).count() / float(testData.count())
-print "Precision is " + testErr
+
+
 
 
