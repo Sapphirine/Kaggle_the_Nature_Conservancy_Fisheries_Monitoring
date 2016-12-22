@@ -32,3 +32,7 @@ This project is inspired by Kaggle.com "the-nature-conservancy-fisheries-monitor
 ### Deep Learning
 + [classification_cnn.py](https://github.com/Sapphirine/Kaggle_the_Nature_Conservancy_Fisheries_Monitoring/blob/master/lib/classification_cnn.py): Convolutional Neural Network
 + [classification_cnn_LAG.py](https://github.com/Sapphirine/Kaggle_the_Nature_Conservancy_Fisheries_Monitoring/blob/master/lib/classification_cnn_LAG.py): Improve result by re-weighting
+
+### Technical Presentation 
+https://youtu.be/dlaS8nACQ7w
+
