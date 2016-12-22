@@ -18,6 +18,7 @@ from keras.utils import np_utils
 
 class CNN():
     def __init__(self):
+        
         # Read train data
         train_data = []
         train_id = []
@@ -40,7 +41,6 @@ class CNN():
             print('Read train data time: {} seconds'.format(round(time.time() - start_time, 2)))
 
         # Normalize train data
-
         print('Convert to numpy...')
         train_data = np.array(train_data, dtype=np.uint8)
         train_target = np.array(train_target, dtype=np.uint8)
